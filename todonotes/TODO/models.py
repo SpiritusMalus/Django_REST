@@ -13,12 +13,10 @@ class Project(models.Model):
 
 
 class ToDo(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='project')
+    users = models.ManyToManyField(Users)
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField()
-    users = models.ManyToManyField(Users)
 
-    def __str__(self):
-        return self.users
