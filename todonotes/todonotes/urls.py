@@ -26,6 +26,7 @@ router.register('users', UsersModelViewSet)
 router.register('project', ProjectModelViewSet)
 router.register('ToDo', ToDoModelViewSet)
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
