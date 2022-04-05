@@ -1,12 +1,13 @@
 import React from "react";
-
+import {Link} from "react-router-dom";
 
 const MenuItems = () => {
   return (
+
       <div className="btn-group">
-        <a href="#" className="btn btn-primary" aria-current="page">Все пользователи</a>
-        <a href="#" className="btn btn-primary">Проект</a>
-        <a href="#" className="btn btn-primary">TODO</a>
+              <Link className="btn btn-primary" aria-current="page" to='/' activeClassName="active">Users</Link>
+              <Link className="btn btn-primary" to='/project' activeClassName="active">Project</Link>
+              <Link className="btn btn-primary" to='/ToDo' activeClassName="active">TODO</Link>
       </div>
   )
 }
