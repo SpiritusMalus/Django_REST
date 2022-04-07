@@ -6,7 +6,7 @@ from .filters import ProjectFilter, ToDoFilter
 from .serializers import *
 
 
-# Задание №2: default_limit = 1
+
 class ProjectLimitOffset(LimitOffsetPagination):
     default_limit = 10
 
