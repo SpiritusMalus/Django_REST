@@ -12,10 +12,12 @@ class TestProjectModelViewSet(APITestCase):
         self.name = 'admin'
         self.password = 'admin'
         self.email = 'admin@am.ru'
-        self.data = {'name': 'Mortys', 'urls_rep': 'http://127.0.0.1:8000/api/users/', 'users': [1]}
-        self.url = '/api/project/'
 
         self.admin = Users.objects.create_superuser(username=self.name, password=self.password, email=self.email)
+        self.user_create = Users.objects.create(username='Malum', password='y6661342Ll', email='user_u@user.ru')
+
+        self.data = {'name': 'Mortys', 'urls_rep': 'http://127.0.0.1:8000/api/users/', 'users': [self.user_create.id]}
+        self.url = '/api/project/'
 
     def test_get_list(self):
         response = self.client.get(self.url)
@@ -24,12 +26,11 @@ class TestProjectModelViewSet(APITestCase):
 
     def test_create_project(self):
         project = Project.objects.create(**self.data)
-        # user = Users.objects.all()
-        # print(user)
-        # project.users.set()
+        # user = Users.objects.first()
+        # print(user.id)
+        # project.users.add(user.id)
         self.client.login(username=self.name, password=self.password)
-        response = self.client.put(self.url, self.data, format='json')
-        print(response)
+        response = self.client.post(self.url, self.data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.client.logout()
 
