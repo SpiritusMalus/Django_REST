@@ -9,3 +9,7 @@ class UsersModelSerializer(ModelSerializer):
         fields = ('first_name', 'last_name', 'username', 'email')
 
 
+class UsersStaffModelSerializer(ModelSerializer):
+    class Meta:
+        model = Users
+        fields = ('is_superuser', 'is_staff',)
