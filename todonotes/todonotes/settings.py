@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'usersapp',
     'TODO',
     'drf_yasg',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -168,4 +169,8 @@ REST_FRAMEWORK = {
 
 
 
+}
+
+GRAPHENE = {
+    'SCHEMA': 'usersapp.schema.schema'
 }
