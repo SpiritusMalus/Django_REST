@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from graphene_django.views import GraphQLView
 
 from rest_framework.routers import DefaultRouter
 
@@ -56,4 +57,5 @@ urlpatterns = [
     # path('api/users/v2', include('usersapp.urls', namespace='v2')),
 
     path('swagger/', schema.with_ui('swagger')),
+    path('graphql/', GraphQLView.as_view(graphiql=True))
 ]
