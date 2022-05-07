@@ -1,15 +1,16 @@
 import React from "react";
+import {Link} from "react-router-dom";
 //Это логика поиска имени для вывода в фронт. Не знаю как написать
 // todo.project === project.id
 // project.users === users.id => users.first_name
-const ToDoItem = ({todo, project}) => {
-    let is_act = todo.is_active.toString()
-    // Для красоты
-    if (is_act){
-        is_act = 'Активно'
-    } else {
-        is_act = 'Завершен'
-    }
+const ToDoItem = ({todo, deleteToDo}) => {
+    // let is_act = todo.is_active.toString()
+    // // Для красоты
+    // if (is_act){
+    //     is_act = 'Активно'
+    // } else {
+    //     is_act = 'Завершен'
+    // }
    return (
        <tr>
            <td>
@@ -27,7 +28,10 @@ const ToDoItem = ({todo, project}) => {
                {todo.users_name}
            </td>
            <td>
-               {is_act}
+               {todo.is_active.toString()}
+           </td>
+           <td>
+               <button onClick={()=>deleteToDo(todo.id)} type='button'>Delete</button>
 
            </td>
        </tr>
@@ -35,7 +39,7 @@ const ToDoItem = ({todo, project}) => {
 }
 
 
-const ToDoList = ({todos}) => {
+const ToDoList = ({todos, deleteToDo}) => {
    return (
        <table>
            <th class="p-3 mb-2 bg-success text-white">
@@ -53,7 +57,8 @@ const ToDoList = ({todos}) => {
            <th className="p-3 mb-2 bg-warning text-dark">
                Active?
            </th>
-           {todos.map((todo) => <ToDoItem todo={todo}/>)}
+           {todos.map((todo) => <ToDoItem todo={todo} deleteToDo={deleteToDo}/>)}
+           <Link to='/ToDo/create'>Create</Link>
        </table>
    )
 }

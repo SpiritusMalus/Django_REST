@@ -6,9 +6,14 @@ import MenuItems from "./components/Menu";
 import FooterItems from "./components/Footer";
 import LoginForm from "./components/Auth";
 import axios from "axios";
-import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import ToDoList from "./components/ToDo";
 import Cookies from 'universal-cookie';
+import ProjectForm from "./components/ProjectForm";
+import ToDoForm from "./components/ToDoForm";
+
+
+
 
 class App extends React.Component {
     constructor(props) {
@@ -18,8 +23,50 @@ class App extends React.Component {
             'projects': [],
             'todos': [],
             'token':'',
-            'auth': false
+            'auth': false,
         }
+    }
+
+    createProject(name, urls_rep, users){
+        const headers = this.get_headers()
+        const data = {name:name, urls_rep:urls_rep, users:[users]}
+        axios.post('http://127.0.0.1:8000/api/project/', data, {headers}).then(response => {
+            this.load_data()
+
+        }).catch(error => console.log(error))
+    }
+
+    deleteProject(id){
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/project/${id}`, {headers}).then(response => {
+            this.load_data()
+        }).catch(error => console.log(error))
+    }
+
+    createToDo(text, is_active, project, users_name){
+        const headers = this.get_headers()
+        const data = {text:text, is_active:is_active, project:project, users_name:users_name}
+        axios.post('http://127.0.0.1:8000/api/ToDo/', data, {headers}).then(response => {
+            this.load_data()
+        }).catch(error => console.log(error))
+    }
+
+    deleteToDo(id){
+        const headers = this.get_headers()
+        axios.delete(`http://127.0.0.1:8000/api/ToDo/${id}`, {headers}).then(response => {
+            this.load_data()
+        }).catch(error => console.log(error))
+    }
+
+    searchProject(name){
+        const headers = this.get_headers()
+        axios.get(`http://127.0.0.1:8000/api/project/?search=${name}`, {headers}).then(response => {
+            this.setState(
+                {
+                    'projects': response.data
+                }
+            )
+        }).catch(error => console.log(error))
     }
 
     load_data(){
@@ -59,7 +106,7 @@ class App extends React.Component {
         )
 
     }
-    // Создал состояние, передал Тру, вернул словарик
+
     is_auth(){
         this.setState({'auth': !!this.state.token})
         return this.state.auth
@@ -105,10 +152,53 @@ class App extends React.Component {
                         {/*Статус просто передаётся в фигурных, а функции с перенаправлением*/}
                         <MenuItems is_auth={this.state.auth} logout={() => this.logout()}/>
                             <Switch>
-                                <Route exact path='/' component={() => <UserList users={this.state.users} />} />
-                                <Route exact path='/project' component={() => <ProjectList projects={this.state.projects} />} />
-                                <Route exact path='/ToDo' component={() => <ToDoList todos={this.state.todos} />} />
-                                <Route exact path='/login' component={() => <LoginForm get_token={(username, password) => this.get_token(username, password)} />} />
+                                <Route exact path='/' component={() =>
+                                    <UserList
+                                        users={this.state.users}
+                                    />}
+                                />
+
+                                <Route exact path='/project' component={() =>
+                                    <ProjectList
+                                        searchProject={(name)=> this.searchProject(name)}
+                                        projects={this.state.projects}
+                                        deleteProject={(id) => this.deleteProject(id)}
+                                    />}
+                                />
+
+                                <Route exact path='/project/create' component={() =>
+                                    <ProjectForm
+                                        users={this.state.users}
+                                        createProject={(name, urls_rep, users) => this.createProject(name, urls_rep, users)}
+                                    />}
+                                />
+
+                                {/*<Route exact path='/project/search' component={() =>*/}
+                                {/*    <SearchForm searchProject={(name)=> this.searchProject(name)}*/}
+                                {/*    />}*/}
+                                {/*/>*/}
+
+                                <Route exact path='/ToDo' component={() =>
+                                    <ToDoList
+                                        todos={this.state.todos}
+                                        deleteToDo={(id) => this.deleteToDo(id)}
+                                    />}
+                                />
+
+                                <Route exact path='/ToDo/create' component={() =>
+                                    <ToDoForm
+                                        projects={this.state.projects}
+                                        users={this.state.users}
+                                        createToDo={(text, is_active, project, users_name) =>
+                                            this.createToDo(text, is_active, project, users_name)}
+                                    />}
+                                />
+
+                                <Route exact path='/login' component={() =>
+                                    <LoginForm
+                                        get_token={(username, password) => this.get_token(username, password)}
+                                    />}
+                                />
                             </Switch>
                         <FooterItems/>
                     </BrowserRouter>

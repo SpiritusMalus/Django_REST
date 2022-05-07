@@ -1,10 +1,10 @@
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from .filters import ProjectFilter, ToDoFilter
 from .serializers import *
-
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 class ProjectLimitOffset(LimitOffsetPagination):
     default_limit = 10
@@ -18,6 +18,8 @@ class ProjectModelViewSet(ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectModelSerializer
     filterset_class = ProjectFilter
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ['name']
     # pagination_class = ProjectLimitOffset
 
 
