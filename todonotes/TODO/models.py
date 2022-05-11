@@ -8,6 +8,7 @@ class Project(models.Model):
     urls_rep = models.URLField(verbose_name='URL repository', blank=True)
     users = models.ManyToManyField(Users)
 
+
     def __str__(self):
         return self.name
 
