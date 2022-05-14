@@ -63,7 +63,7 @@ ROOT_URLCONF = 'todonotes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'frontend/build'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,13 +82,23 @@ WSGI_APPLICATION = 'todonotes.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'database',
+        'PASSWORD': 'admin',
+        'USER': 'admin',
+        'HOST': 'database',
+        'PORT': '5432'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -127,7 +137,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = (BASE_DIR / 'frontend/build/static/',)
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -136,10 +146,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'usersapp.Users'
 
 CORS_ALLOWED_ORIGINS = [
+    'http://0.0.0.0:80',
     'http://127.0.0.1:3000',
     'http://localhost:8000',
+    'http://127.0.0.1:5432',
+    'http://localhost:5432',
 
 ]
+CORS_ALLOW_ALL_ORIGINS = True
 # from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
